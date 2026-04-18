@@ -14,7 +14,8 @@ Yuren 自用的 PWA，作為 Claude app 和 Obsidian 撐不住的互動場景的
 
 - 單一 repo、單一 Supabase DB、多 feature 並存
 - Feature 之間用 table prefix 區隔（`jp_*`, `fin_*`, ...）
-- Auth：magic link，只有 `yurenju@gmail.com` 可登入（首次註冊後關閉 signup + RLS email 雙層防護）
+- Auth：magic link + allowlist（`is_allowed_user()` function），signup 關閉（三層防護：signup disabled + email allowlist + `user_id = auth.uid()` RLS）
+- 路由：HashRouter（`/#/jp` 等），GitHub Pages SPA 無需 server 設定
 - Offline-first：本地寫 → sync queue → Supabase，last-write-wins
 
 ## Schema Pattern
@@ -60,8 +61,61 @@ Checklist：
 
 ## Features
 
-- [ ] 日文閃卡（SM-2，第一個 feature）
+- [x] 日文閃卡（`/#/jp`）— SM-2、句子雙向、Dexie offline + sync queue、ruby toggle
 
 ## Development
 
-待補（scaffold 尚未建立）。
+### 第一次 setup
+
+```bash
+git clone git@github.com:withbernardlowe/bernard-app.git
+cd bernard-app
+bun install
+cp .env.example .env.local
+# 編輯 .env.local 填入 VITE_SUPABASE_URL 和 VITE_SUPABASE_ANON_KEY
+# 值在 1Password 的 "Bernard Supabase" item
+bun dev  # http://localhost:5173
+```
+
+### 常用指令
+
+| 指令 | 用途 |
+|------|------|
+| `bun dev` | dev server（HMR） |
+| `bun run build` | 型別檢查 + 打包 |
+| `bun test <path>` | 跑單元測試（SM-2 等 pure function） |
+| `bunx shadcn@latest add <component>` | 加新的 shadcn UI 元件 |
+
+### 加新 feature
+
+1. 先在 clawd workspace 走 `superpowers:brainstorming` 討論 spec
+2. 在 `supabase/migrations/` 新增 `YYYYMMDDHHMMSS_<name>.sql`，遵守上面的 **Schema Pattern**
+3. 用 Supabase MCP `apply_migration` 推到遠端
+4. 在 `src/features/<name>/` 開新目錄放所有程式
+5. 在 `src/routes.tsx` 加新路由
+6. env 變數（如果有）：本機 `.env.local` + `gh secret set` 設 CI secret
+
+### 部署
+
+- 推到 `main` → GitHub Actions 自動 build + deploy 到 https://app.withbernard.xyz
+- 需要新 secret：`gh secret set <NAME> --body <value> --repo withbernardlowe/bernard-app`
+- 本機驗證 build：`bun run build`
+
+### Schema migration
+
+- 本地改 `supabase/migrations/` 當 source of truth
+- 遠端實際套 migration 用 Supabase MCP（`apply_migration`），不靠 Supabase CLI
+- Dedupe：`on conflict (user_id, ...) do nothing` 讓重跑 import idempotent
+
+### Offline / Sync
+
+- UI 讀 Dexie 為主（source of truth for render）
+- 初次 load：從 Supabase pull 進 Dexie
+- 寫入：local update + push 到 `sync_queue` → 背景 flush 到 Supabase
+- 離線時 grade 照樣前進，重新連線 / tab 回到前景時自動 flush
+
+### Troubleshooting
+
+- **Build fail 找不到 `bun:test`**：`tsconfig.app.json` 已排除 `*.test.ts`，確認沒被還原
+- **Magic link redirect 失敗**：檢查 Supabase dashboard → Auth → URL Configuration 有 `https://app.withbernard.xyz/**` 和 `http://localhost:5173/**`
+- **Pages build 過了但瀏覽器看到舊版**：Cloudflare CDN cache，等 10 分鐘或 purge cache
