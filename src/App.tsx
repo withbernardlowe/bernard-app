@@ -1,6 +1,6 @@
 import { useSession } from '@/hooks/useSession'
 import { LoginPage } from '@/components/LoginPage'
-import { AuthenticatedApp } from '@/components/AuthenticatedApp'
+import { AppRoutes } from '@/routes'
 
 function App() {
   const { session, loading } = useSession()
@@ -17,7 +17,7 @@ function App() {
     return <LoginPage />
   }
 
-  return <AuthenticatedApp session={session} />
+  return <AppRoutes session={session} />
 }
 
 export default App

@@ -1,4 +1,5 @@
 import type { Session } from '@supabase/supabase-js'
+import { Outlet } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 
@@ -23,10 +24,7 @@ export function AuthenticatedApp({ session }: Props) {
         </div>
       </header>
       <main className="flex-1 p-6 flex items-center justify-center">
-        <div className="text-center text-muted-foreground">
-          <p>還沒有 feature</p>
-          <p className="text-xs mt-2">之後會從這裡進入日文閃卡等功能</p>
-        </div>
+        <Outlet />
       </main>
     </div>
   )
