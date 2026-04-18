@@ -6,7 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/bernard-app/',
+  base: '/',
   plugins: [
     react(),
     tailwindcss(),
@@ -20,8 +20,8 @@ export default defineConfig({
         theme_color: '#0a0a0a',
         background_color: '#ffffff',
         display: 'standalone',
-        scope: '/bernard-app/',
-        start_url: '/bernard-app/',
+        scope: '/',
+        start_url: '/',
         icons: [
           {
             src: 'pwa-192.png',
