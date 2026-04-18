@@ -128,3 +128,8 @@
     @apply font-sans;
     }
 }
+
+.ruby-off rt,
+.ruby-off rp {
+  display: none;
+}
