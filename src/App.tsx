@@ -1,14 +1,23 @@
+import { useSession } from '@/hooks/useSession'
+import { LoginPage } from '@/components/LoginPage'
+import { AuthenticatedApp } from '@/components/AuthenticatedApp'
+
 function App() {
-  return (
-    <div className="min-h-dvh flex items-center justify-center bg-background text-foreground">
-      <div className="text-center">
-        <h1 className="text-3xl font-semibold tracking-tight">bernard-app</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Yuren&apos;s personal PWA — scaffold ready
-        </p>
+  const { session, loading } = useSession()
+
+  if (loading) {
+    return (
+      <div className="min-h-dvh flex items-center justify-center">
+        <div className="text-sm text-muted-foreground">載入中…</div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  if (!session) {
+    return <LoginPage />
+  }
+
+  return <AuthenticatedApp session={session} />
 }
 
 export default App
