@@ -2,6 +2,7 @@ import type { Session } from '@supabase/supabase-js'
 import { Outlet } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 interface Props {
   session: Session
@@ -18,6 +19,7 @@ export function AuthenticatedApp({ session }: Props) {
         <div className="font-semibold">bernard-app</div>
         <div className="flex items-center gap-3 text-sm">
           <span className="text-muted-foreground">{session.user.email}</span>
+          <ThemeToggle />
           <Button variant="outline" size="sm" onClick={handleSignOut}>
             登出
           </Button>

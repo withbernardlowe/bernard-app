@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 type Status =
   | { kind: 'idle' }
@@ -37,7 +38,10 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-dvh flex items-center justify-center p-4">
+    <div className="min-h-dvh flex items-center justify-center p-4 relative">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>bernard-app</CardTitle>
