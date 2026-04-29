@@ -1,7 +1,7 @@
 import type { LocalCard } from '@/lib/db'
 import { extractLessonDate } from './lessonPath'
 
-export type LessonStatus = 'untouched' | 'partial' | 'started'
+export type LessonStatus = 'untouched' | 'partial' | 'reviewed'
 
 export interface LessonGroup {
   sourceNote: string
@@ -25,7 +25,7 @@ export function groupByLesson(cards: LocalCard[]): LessonGroup[] {
     const reviewedCount = cs.filter((c) => c.repetitions > 0).length
     let status: LessonStatus
     if (reviewedCount === 0) status = 'untouched'
-    else if (reviewedCount === cs.length) status = 'started'
+    else if (reviewedCount === cs.length) status = 'reviewed'
     else status = 'partial'
     groups.push({ sourceNote, date, cards: cs, status })
   }

@@ -46,9 +46,9 @@ describe('groupByLesson', () => {
     expect(groupByLesson(cards)[0].status).toBe('untouched')
   })
 
-  test('status: started when all repetitions > 0', () => {
+  test('status: reviewed when all repetitions > 0', () => {
     const cards = [card({ repetitions: 1 }), card({ repetitions: 3 })]
-    expect(groupByLesson(cards)[0].status).toBe('started')
+    expect(groupByLesson(cards)[0].status).toBe('reviewed')
   })
 
   test('status: partial when mixed', () => {
