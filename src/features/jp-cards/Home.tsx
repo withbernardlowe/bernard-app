@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { db, type LocalCard } from '@/lib/db'
+import { db } from '@/lib/db'
 import { pullCards, flushQueue, startBackgroundSync } from './sync'
 import { groupByLesson, getDueBatch, type LessonGroup } from './queue'
 import { Button } from '@/components/ui/button'
