@@ -3,12 +3,10 @@ import { supabase } from '@/lib/supabase'
 
 export interface JpSettings {
   showRuby: boolean
-  dailyNewLimit: number
 }
 
 const DEFAULTS: JpSettings = {
   showRuby: false,
-  dailyNewLimit: 10,
 }
 
 export function useJpSettings() {
@@ -21,13 +19,11 @@ export function useJpSettings() {
       const { data } = await supabase
         .from('app_meta')
         .select('key, value')
-        .in('key', ['jp_show_ruby', 'jp_daily_new_limit'])
+        .eq('key', 'jp_show_ruby')
       if (cancelled) return
       const next = { ...DEFAULTS }
       for (const row of data ?? []) {
         if (row.key === 'jp_show_ruby') next.showRuby = Boolean(row.value)
-        if (row.key === 'jp_daily_new_limit')
-          next.dailyNewLimit = Number(row.value)
       }
       setSettings(next)
       setLoading(false)
