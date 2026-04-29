@@ -33,3 +33,15 @@ export function groupByLesson(cards: LocalCard[]): LessonGroup[] {
   groups.sort((a, b) => b.date.localeCompare(a.date))
   return groups
 }
+
+export function getDueBatch(
+  cards: LocalCard[],
+  batchSize: number,
+  now: Date,
+): LocalCard[] {
+  const nowIso = now.toISOString()
+  return cards
+    .filter((c) => c.last_reviewed_at !== null && c.due_at <= nowIso)
+    .sort((a, b) => a.due_at.localeCompare(b.due_at))
+    .slice(0, batchSize)
+}
