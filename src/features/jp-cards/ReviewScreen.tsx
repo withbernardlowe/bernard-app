@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react'
-import { db, type LocalCard } from '@/lib/db'
-import {
-  pullCards,
-  flushQueue,
-  startBackgroundSync,
-  updateCardLocal,
-} from './sync'
-import { getDueQueue } from './queue'
+import { type LocalCard } from '@/lib/db'
+import { updateCardLocal, flushQueue } from './sync'
 import { applyRating } from './sm2'
 import type { Rating, SRSState } from './types'
 import { useJpSettings } from './useSettings'
 import { CardView } from './CardView'
 import { GradeButtons } from './GradeButtons'
-import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 
-type LoadState = 'loading' | 'ready' | 'error'
+interface Props {
+  cards: LocalCard[]
+  onComplete: () => void
+}
 
 function cardToSRS(c: LocalCard): SRSState {
   return {
@@ -26,34 +22,18 @@ function cardToSRS(c: LocalCard): SRSState {
   }
 }
 
-export function ReviewScreen() {
-  const [loadState, setLoadState] = useState<LoadState>('loading')
-  const [queue, setQueue] = useState<LocalCard[]>([])
+export function ReviewScreen({ cards, onComplete }: Props) {
+  const [queue, setQueue] = useState<LocalCard[]>(cards)
   const [currentIdx, setCurrentIdx] = useState(0)
   const [flipped, setFlipped] = useState(false)
   const { settings, setShowRuby } = useJpSettings()
 
+  const isDone = currentIdx >= queue.length
+
   useEffect(() => {
-    const unsubscribe = startBackgroundSync()
-    ;(async () => {
-      try {
-        await flushQueue()
-        await pullCards()
-        const all = await db.jp_cards.toArray()
-        const built = getDueQueue(
-          all,
-          { dailyNewLimit: settings.dailyNewLimit },
-          new Date(),
-        )
-        setQueue(built)
-        setLoadState('ready')
-      } catch (e) {
-        console.error(e)
-        setLoadState('error')
-      }
-    })()
-    return unsubscribe
-  }, [settings.dailyNewLimit])
+    if (isDone) onComplete()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDone])
 
   async function handleGrade(rating: Rating) {
     const card = queue[currentIdx]
@@ -72,10 +52,11 @@ export function ReviewScreen() {
 
     if (rating < 3) {
       const updated = { ...card, ...changes }
-      setQueue((q) => {
-        const rest = q.slice(currentIdx + 1)
-        return [...q.slice(0, currentIdx), ...rest, updated]
-      })
+      setQueue((q) => [
+        ...q.slice(0, currentIdx),
+        ...q.slice(currentIdx + 1),
+        updated,
+      ])
       setFlipped(false)
       return
     }
@@ -83,25 +64,7 @@ export function ReviewScreen() {
     setFlipped(false)
   }
 
-  if (loadState === 'loading') {
-    return <div className="text-center text-muted-foreground">載入中…</div>
-  }
-  if (loadState === 'error') {
-    return (
-      <div className="text-center space-y-3">
-        <p>載入失敗</p>
-        <Button onClick={() => window.location.reload()}>重試</Button>
-      </div>
-    )
-  }
-  if (currentIdx >= queue.length) {
-    return (
-      <div className="text-center text-muted-foreground space-y-2">
-        <p>今天複習完成 🎉</p>
-        <p className="text-xs">下次到期時間請等新的 lesson note 或明天</p>
-      </div>
-    )
-  }
+  if (isDone) return null
 
   const card = queue[currentIdx]
 
