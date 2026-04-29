@@ -152,3 +152,29 @@ describe('getDueBatch', () => {
     expect(getDueBatch(cards, 20, NOW)).toHaveLength(20)
   })
 })
+
+import { shuffleInPlace } from './queue'
+
+describe('shuffleInPlace', () => {
+  test('preserves length and elements', () => {
+    const arr = [1, 2, 3, 4, 5]
+    const shuffled = shuffleInPlace([...arr])
+    expect(shuffled).toHaveLength(5)
+    expect([...shuffled].sort()).toEqual([1, 2, 3, 4, 5])
+  })
+
+  test('returns the same array reference', () => {
+    const arr = [1, 2, 3]
+    expect(shuffleInPlace(arr)).toBe(arr)
+  })
+
+  test('eventually changes order across many runs', () => {
+    const original = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    let differed = false
+    for (let i = 0; i < 50 && !differed; i++) {
+      const out = shuffleInPlace([...original])
+      if (out.some((v, idx) => v !== original[idx])) differed = true
+    }
+    expect(differed).toBe(true)
+  })
+})
