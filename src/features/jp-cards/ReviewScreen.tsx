@@ -186,7 +186,9 @@ export function ReviewScreen({ cards, onComplete }: Props) {
           </span>
         </div>
         <ProgressDots current={current} total={total} />
-        <RubyToggle value={settings.showRuby} onChange={setShowRuby} />
+        <div style={{ visibility: flipped ? 'hidden' : 'visible' }}>
+          <RubyToggle value={settings.showRuby} onChange={setShowRuby} />
+        </div>
       </div>
 
       {/* Card stage */}

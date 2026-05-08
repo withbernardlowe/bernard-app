@@ -142,7 +142,7 @@ function FrontFace({ card, showRuby, sizeHint }: { card: LocalCard; showRuby: bo
   )
 }
 
-function BackFace({ card, showRuby, sizeHint }: { card: LocalCard; showRuby: boolean; sizeHint: 'mobile' | 'desktop' }) {
+function BackFace({ card, sizeHint }: { card: LocalCard; sizeHint: 'mobile' | 'desktop' }) {
   const jpSize = sizeHint === 'mobile' ? 28 : 40
   const cnSize = sizeHint === 'mobile' ? 18 : 22
   const gap = sizeHint === 'mobile' ? 18 : 28
@@ -152,7 +152,7 @@ function BackFace({ card, showRuby, sizeHint }: { card: LocalCard; showRuby: boo
       <HeaderRow card={card} sizeHint={sizeHint} />
       <div className="flex-1 flex flex-col justify-center" style={{ gap }}>
         <div
-          className={cn('text-center', showRuby ? '' : 'ruby-off')}
+          className="text-center"
           style={{
             fontFamily: 'var(--font-serif-jp)',
             fontSize: jpSize,
@@ -198,7 +198,7 @@ export function CardView({ card, flipped, showRuby, onFlip, sizeHint = 'desktop'
           <FrontFace card={card} showRuby={showRuby} sizeHint={sizeHint} />
         </div>
         <div className="flip-face flip-back">
-          <BackFace card={card} showRuby={showRuby} sizeHint={sizeHint} />
+          <BackFace card={card} sizeHint={sizeHint} />
         </div>
       </div>
     </button>
