@@ -85,6 +85,18 @@ export function ReviewScreen({ cards, onComplete }: Props) {
   const [shake, setShake] = useState(0)
   const [exitTo, setExitTo] = useState<null | 'left' | 'right'>(null)
   const { settings, setShowRuby } = useJpSettings()
+  const [isMobile, setIsMobile] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(max-width: 767px)').matches,
+  )
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const update = () => setIsMobile(mq.matches)
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
 
   const isDone = currentIdx >= queue.length
 
@@ -191,8 +203,8 @@ export function ReviewScreen({ cards, onComplete }: Props) {
           style={{
             maxWidth: 560,
             margin: '0 auto',
-            aspectRatio: '1.3 / 1',
-            minHeight: 360,
+            aspectRatio: isMobile ? undefined : '1.3 / 1',
+            minHeight: isMobile ? 480 : 360,
           }}
         >
           <CardView
@@ -200,7 +212,7 @@ export function ReviewScreen({ cards, onComplete }: Props) {
             flipped={flipped}
             showRuby={settings.showRuby}
             onFlip={() => setFlipped((f) => !f)}
-            sizeHint="desktop"
+            sizeHint={isMobile ? 'mobile' : 'desktop'}
           />
         </div>
       </div>
