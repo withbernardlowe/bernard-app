@@ -203,8 +203,8 @@ export function ReviewScreen({ cards, onComplete }: Props) {
           style={{
             maxWidth: 560,
             margin: '0 auto',
-            aspectRatio: isMobile ? undefined : '1.3 / 1',
-            minHeight: isMobile ? 480 : 360,
+            aspectRatio: isMobile ? '5 / 7' : '1.3 / 1',
+            minHeight: 360,
           }}
         >
           <CardView
