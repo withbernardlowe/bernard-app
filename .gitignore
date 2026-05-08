@@ -17,6 +17,9 @@ dist-ssr
 .env.local
 .env.*.local
 
+# Design handoff bundles (kept locally only)
+reference/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

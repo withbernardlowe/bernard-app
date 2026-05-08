@@ -72,21 +72,42 @@ export function Home() {
   const today = todayInTokyo()
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-6 p-4">
-      <section className="border rounded-lg p-4 space-y-2">
-        <div className="font-medium">到期複習</div>
-        <div className="text-sm text-muted-foreground">
+    <div className="w-full max-w-md mx-auto space-y-8 p-6">
+      <section
+        className="rounded-2xl p-6 space-y-3 relative overflow-hidden"
+        style={{
+          background: 'var(--paper-grad)',
+          boxShadow:
+            'var(--paper-inner-hi), var(--paper-rim), var(--paper-shadow)',
+        }}
+      >
+        <div className="paper-grain" />
+        <div
+          className="relative font-medium text-lg"
+          style={{ fontFamily: 'var(--font-serif-tc)', color: 'var(--paper-ink)' }}
+        >
+          到期複習
+        </div>
+        <div
+          className="relative text-sm"
+          style={{ color: 'var(--paper-meta)' }}
+        >
           {dueCount > 0 ? `${dueCount} 張到期` : '目前無到期'}
         </div>
-        <Button asChild disabled={dueCount === 0}>
-          <Link to="/jp/due" aria-disabled={dueCount === 0}>
-            來一輪
-          </Link>
-        </Button>
+        <div className="relative">
+          <Button asChild disabled={dueCount === 0}>
+            <Link to="/jp/due" aria-disabled={dueCount === 0}>
+              來一輪
+            </Link>
+          </Button>
+        </div>
       </section>
 
-      <section className="space-y-2">
-        <div className="text-sm font-medium text-muted-foreground">
+      <section className="space-y-3">
+        <div
+          className="text-xs font-mono uppercase tracking-[0.16em]"
+          style={{ color: 'var(--paper-meta)' }}
+        >
           按課堂複習
         </div>
         {lessons.length === 0 && (
@@ -99,14 +120,22 @@ export function Home() {
             <li key={g.sourceNote}>
               <Link
                 to={`/jp/lesson/${g.date}`}
-                className="flex items-center justify-between py-3 hover:bg-accent rounded px-2"
+                className="flex items-center justify-between py-3.5 px-2 rounded-md hover:bg-accent transition-colors"
               >
-                <span>
+                <span style={{ fontFamily: 'var(--font-serif-tc)' }}>
                   {g.date}
                   {g.date === today && (
-                    <span className="ml-2 text-xs text-primary">（今天）</span>
+                    <span
+                      className="ml-2 text-xs font-mono"
+                      style={{ color: 'var(--paper-meta)' }}
+                    >
+                      （今天）
+                    </span>
                   )}
-                  <span className="ml-2 text-xs text-muted-foreground">
+                  <span
+                    className="ml-2 font-mono text-xs"
+                    style={{ color: 'var(--paper-meta)' }}
+                  >
                     · {g.cards.length} 張
                   </span>
                 </span>

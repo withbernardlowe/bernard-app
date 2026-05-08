@@ -38,13 +38,18 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-dvh flex items-center justify-center p-4 relative">
+    <div
+      data-stage="cream"
+      className="min-h-dvh flex items-center justify-center p-4 relative"
+    >
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>bernard-app</CardTitle>
+          <CardTitle style={{ fontFamily: 'var(--font-serif-tc)' }}>
+            bernard-app
+          </CardTitle>
           <CardDescription>Yuren 的私人 PWA</CardDescription>
         </CardHeader>
         <CardContent>
