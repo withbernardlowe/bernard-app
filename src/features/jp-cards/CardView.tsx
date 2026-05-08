@@ -111,6 +111,8 @@ function FrontFace({ card, showRuby, sizeHint }: { card: LocalCard; showRuby: bo
             fontWeight: 500,
             letterSpacing: '0.01em',
             textWrap: 'balance',
+            wordBreak: 'break-all',
+            overflowWrap: 'anywhere',
             maxWidth: '100%',
           }}
           dangerouslySetInnerHTML={{ __html: card.jp_text }}
@@ -159,6 +161,8 @@ function BackFace({ card, showRuby, sizeHint }: { card: LocalCard; showRuby: boo
             fontWeight: 500,
             letterSpacing: '0.01em',
             textWrap: 'balance',
+            wordBreak: 'break-all',
+            overflowWrap: 'anywhere',
           }}
           dangerouslySetInnerHTML={{ __html: card.jp_text }}
         />
