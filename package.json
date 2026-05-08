@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",
+    "@fontsource-variable/geist-mono": "^5.2.7",
+    "@fontsource/noto-serif-jp": "^5.2.8",
+    "@fontsource/noto-serif-tc": "^5.2.10",
     "@supabase/supabase-js": "^2.103.3",
     "@tailwindcss/vite": "^4.2.2",
     "class-variance-authority": "^0.7.1",

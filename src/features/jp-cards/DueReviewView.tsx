@@ -55,24 +55,41 @@ export function DueReviewView() {
   if (state === 'finished') {
     if (batch.length > 0) {
       return (
-        <div className="text-center space-y-4 p-8">
-          <p className="text-2xl">🎉 完成這一輪</p>
-          <p className="text-sm text-muted-foreground">
-            到期還剩：{remainingAfter} 張
-          </p>
-          <div className="flex justify-center gap-3">
-            <Button onClick={loadNextBatch}>再來一輪</Button>
-            <Button variant="outline" onClick={() => navigate('/jp')}>
-              回首頁
-            </Button>
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="text-center space-y-4 max-w-sm">
+            <p
+              className="text-3xl"
+              style={{ fontFamily: 'var(--font-serif-tc)', color: 'var(--paper-ink)' }}
+            >
+              完成這一輪
+            </p>
+            <p
+              className="font-mono text-sm tracking-[0.04em]"
+              style={{ color: 'var(--paper-meta)' }}
+            >
+              到期還剩：{remainingAfter} 張
+            </p>
+            <div className="flex justify-center gap-3">
+              <Button onClick={loadNextBatch}>再來一輪</Button>
+              <Button variant="outline" onClick={() => navigate('/jp')}>
+                回首頁
+              </Button>
+            </div>
           </div>
         </div>
       )
     }
     return (
-      <div className="text-center space-y-4 p-8">
-        <p className="text-2xl">🎉 全部到期複習完成</p>
-        <Button onClick={() => navigate('/jp')}>回首頁</Button>
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="text-center space-y-4 max-w-sm">
+          <p
+            className="text-3xl"
+            style={{ fontFamily: 'var(--font-serif-tc)', color: 'var(--paper-ink)' }}
+          >
+            全部到期複習完成
+          </p>
+          <Button onClick={() => navigate('/jp')}>回首頁</Button>
+        </div>
       </div>
     )
   }
