@@ -3,7 +3,6 @@ import { type LocalCard } from '@/lib/db'
 import { updateCardLocal, flushQueue } from './sync'
 import { applyRating } from './sm2'
 import type { Rating, SRSState } from './types'
-import { useJpSettings } from './useSettings'
 import { CardView } from './CardView'
 import { GradeButtons } from './GradeButtons'
 import { cn } from '@/lib/utils'
@@ -46,45 +45,12 @@ function ProgressDots({ current, total }: { current: number; total: number }) {
   )
 }
 
-function RubyToggle({
-  value,
-  onChange,
-}: {
-  value: boolean
-  onChange: (v: boolean) => void
-}) {
-  return (
-    <label className="flex items-center gap-1.5 cursor-pointer text-xs select-none">
-      <span
-        className="relative inline-block h-4 w-7 rounded-full transition-colors"
-        style={{ background: value ? 'var(--foreground)' : 'var(--border)' }}
-      >
-        <span
-          className="absolute top-0.5 size-3 rounded-full transition-[left]"
-          style={{
-            left: value ? 14 : 2,
-            background: 'var(--background)',
-          }}
-        />
-      </span>
-      <span className="text-muted-foreground">假名</span>
-      <input
-        type="checkbox"
-        className="sr-only"
-        checked={value}
-        onChange={(e) => onChange(e.target.checked)}
-      />
-    </label>
-  )
-}
-
 export function ReviewScreen({ cards, onComplete }: Props) {
   const [queue, setQueue] = useState<LocalCard[]>(cards)
   const [currentIdx, setCurrentIdx] = useState(0)
   const [flipped, setFlipped] = useState(false)
   const [shake, setShake] = useState(0)
   const [exitTo, setExitTo] = useState<null | 'left' | 'right'>(null)
-  const { settings, setShowRuby } = useJpSettings()
   const [isMobile, setIsMobile] = useState(
     () =>
       typeof window !== 'undefined' &&
@@ -178,17 +144,17 @@ export function ReviewScreen({ cards, onComplete }: Props) {
       className="w-full max-w-3xl mx-auto flex flex-col flex-1 min-h-0"
     >
       {/* Top bar */}
-      <div className="flex items-center justify-between gap-3 px-4 md:px-6 py-3 md:py-4 border-b">
-        <div className="flex items-center gap-3 text-xs md:text-sm text-muted-foreground">
+      <div className="grid grid-cols-3 items-center gap-3 px-4 md:px-6 py-3 md:py-4 border-b">
+        <div className="flex items-center gap-3 text-xs md:text-sm text-muted-foreground justify-self-start">
           <span style={{ fontFeatureSettings: '"tnum"' }}>
             <span className="font-semibold text-foreground">{current + 1}</span>
             <span className="opacity-50"> / {total}</span>
           </span>
         </div>
-        <ProgressDots current={current} total={total} />
-        <div style={{ visibility: flipped ? 'hidden' : 'visible' }}>
-          <RubyToggle value={settings.showRuby} onChange={setShowRuby} />
+        <div className="justify-self-center">
+          <ProgressDots current={current} total={total} />
         </div>
+        <div />
       </div>
 
       {/* Card stage */}
@@ -212,7 +178,6 @@ export function ReviewScreen({ cards, onComplete }: Props) {
           <CardView
             card={card}
             flipped={flipped}
-            showRuby={settings.showRuby}
             onFlip={() => setFlipped((f) => !f)}
             sizeHint={isMobile ? 'mobile' : 'desktop'}
           />

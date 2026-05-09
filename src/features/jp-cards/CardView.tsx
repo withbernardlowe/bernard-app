@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils'
 interface Props {
   card: LocalCard
   flipped: boolean
-  showRuby: boolean
   onFlip: () => void
   sizeHint?: 'mobile' | 'desktop'
 }
@@ -93,7 +92,7 @@ function PaperFace({
   )
 }
 
-function FrontFace({ card, showRuby, sizeHint }: { card: LocalCard; showRuby: boolean; sizeHint: 'mobile' | 'desktop' }) {
+function FrontFace({ card, sizeHint }: { card: LocalCard; sizeHint: 'mobile' | 'desktop' }) {
   const isJpFront = card.direction === 'jp_to_cn'
   const jpSize = sizeHint === 'mobile' ? 32 : 44
   const cnSize = sizeHint === 'mobile' ? 28 : 40
@@ -102,7 +101,7 @@ function FrontFace({ card, showRuby, sizeHint }: { card: LocalCard; showRuby: bo
       <HeaderRow card={card} sizeHint={sizeHint} />
       {isJpFront ? (
         <div
-          className={cn('text-center', showRuby ? '' : 'ruby-off')}
+          className="text-center ruby-off"
           style={{
             fontFamily: 'var(--font-serif-jp)',
             fontSize: jpSize,
@@ -185,7 +184,7 @@ function BackFace({ card, sizeHint }: { card: LocalCard; sizeHint: 'mobile' | 'd
   )
 }
 
-export function CardView({ card, flipped, showRuby, onFlip, sizeHint = 'desktop' }: Props) {
+export function CardView({ card, flipped, onFlip, sizeHint = 'desktop' }: Props) {
   return (
     <button
       type="button"
@@ -195,7 +194,7 @@ export function CardView({ card, flipped, showRuby, onFlip, sizeHint = 'desktop'
     >
       <div className={cn('flip-inner', flipped && 'is-flipped')}>
         <div className="flip-face">
-          <FrontFace card={card} showRuby={showRuby} sizeHint={sizeHint} />
+          <FrontFace card={card} sizeHint={sizeHint} />
         </div>
         <div className="flip-face flip-back">
           <BackFace card={card} sizeHint={sizeHint} />
