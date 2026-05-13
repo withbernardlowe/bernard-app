@@ -8,6 +8,7 @@ export interface LocalCard {
   cn_text: string
   source_note: string
   source_section: string | null
+  category: 'warmup' | 'examples'
   ease_factor: number
   interval_days: number
   repetitions: number

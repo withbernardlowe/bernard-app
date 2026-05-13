@@ -17,9 +17,7 @@ const SCOPE_LABEL: Record<Scope, string> = {
 
 function matchesScope(card: LocalCard, scope: Scope): boolean {
   if (scope === 'all') return true
-  const section = card.source_section ?? ''
-  if (scope === 'warmup') return section.startsWith('暖身')
-  return section.includes('講義例句')
+  return card.category === scope
 }
 
 export function LessonView() {

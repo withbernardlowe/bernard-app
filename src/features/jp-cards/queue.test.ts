@@ -11,6 +11,7 @@ function card(overrides: Partial<LocalCard>): LocalCard {
     cn_text: 'cn',
     source_note: '30-resources/japanese-learning/2026-04-29.md',
     source_section: null,
+    category: 'examples',
     ease_factor: 2.5,
     interval_days: 0,
     repetitions: 0,
