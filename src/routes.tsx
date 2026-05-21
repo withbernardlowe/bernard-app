@@ -4,6 +4,7 @@ import { AuthenticatedApp } from '@/components/AuthenticatedApp'
 import { Home } from '@/features/jp-cards/Home'
 import { LessonView } from '@/features/jp-cards/LessonView'
 import { DueReviewView } from '@/features/jp-cards/DueReviewView'
+import { BigTextPage } from '@/features/big-text/BigTextPage'
 
 interface Props {
   session: Session
@@ -18,6 +19,7 @@ export function AppRoutes({ session }: Props) {
           <Route path="/jp" element={<Home />} />
           <Route path="/jp/lesson/:date" element={<LessonView />} />
           <Route path="/jp/due" element={<DueReviewView />} />
+          <Route path="/show" element={<BigTextPage />} />
         </Route>
       </Routes>
     </HashRouter>
