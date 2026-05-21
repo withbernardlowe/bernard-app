@@ -62,6 +62,7 @@ Checklist：
 ## Features
 
 - [x] 日文閃卡（`/#/jp`）— SM-2、句子雙向、Dexie offline + sync queue、ruby toggle
+- [x] 大字顯示（`/#/show`）— 地址/翻好的日文遞給對方看，auto-fit + 手動 +/-，localStorage 存 history（可 pin），獨立亮暗切換
 
 ## Development
 
