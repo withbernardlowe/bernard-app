@@ -4,17 +4,28 @@ import { db, type LocalCard, type SyncQueueItem } from '@/lib/db'
 /**
  * Pull all jp_cards from Supabase into Dexie.
  * Called on app load and after coming back online.
+ *
+ * PostgREST 單次最多回 1000 列，卡片數超過 1000 後必須分頁，
+ * 否則新的卡（排在後面）永遠同步不下來。用 id 排序確保分頁穩定。
  */
 export async function pullCards(): Promise<void> {
-  const { data, error } = await supabase
-    .from('jp_cards')
-    .select('*')
-  if (error) throw error
-  if (!data) return
+  const PAGE = 1000
+  const rows: LocalCard[] = []
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabase
+      .from('jp_cards')
+      .select('*')
+      .order('id', { ascending: true })
+      .range(from, from + PAGE - 1)
+    if (error) throw error
+    if (!data || data.length === 0) break
+    rows.push(...(data as LocalCard[]))
+    if (data.length < PAGE) break
+  }
 
   await db.transaction('rw', db.jp_cards, async () => {
-    for (const row of data) {
-      await db.jp_cards.put(row as LocalCard)
+    for (const row of rows) {
+      await db.jp_cards.put(row)
     }
   })
 }
